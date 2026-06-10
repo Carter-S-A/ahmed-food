@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -56,6 +57,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-secondary);col
 .topbar-progress-bar{width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
 .topbar-progress-fill{height:6px;background:var(--green);border-radius:3px;transition:width 0.4s ease;}
 .topbar-progress-label{font-size:12px;color:var(--text-secondary);white-space:nowrap;font-family:'JetBrains Mono',monospace;}
+.topbar-user{font-size:12px;color:var(--text-secondary);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
 /* LAYOUT */
 .container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
@@ -167,9 +169,32 @@ select:focus{border-color:var(--blue);}
 .footer{text-align:center;padding:2rem 0 1rem;font-size:12px;color:var(--text-tertiary);}
 .footer a{color:var(--blue);text-decoration:none;}
 .footer a:hover{text-decoration:underline;}
+
+/* AUTH MODAL */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:500;}
+.auth-overlay.hidden{display:none;}
+.auth-modal{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;width:100%;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.15);margin:1rem;}
+.auth-brand{font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px;}
+.auth-title{font-size:20px;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:4px;}
+.auth-sub{font-size:13px;color:var(--text-secondary);margin-bottom:1.5rem;line-height:1.5;}
+.auth-tabs{display:flex;gap:4px;background:var(--bg-tertiary);padding:4px;border-radius:var(--radius-md);margin-bottom:1.5rem;}
+.auth-tab{flex:1;padding:7px;border:none;border-radius:var(--radius-sm);background:transparent;color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.auth-tab.active{background:var(--bg-primary);color:var(--text-primary);box-shadow:var(--shadow-sm);}
+.auth-field{margin-bottom:1rem;}
+.auth-field label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px;}
+.auth-field input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary);color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;transition:border-color 0.15s;}
+.auth-field input:focus{border-color:var(--blue);background:var(--bg-primary);}
+.auth-submit{width:100%;padding:10px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-md);font-size:14px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:4px;transition:opacity 0.15s;}
+.auth-submit:hover{opacity:0.88;}
+.auth-submit:disabled{opacity:0.6;cursor:not-allowed;}
+.auth-msg{font-size:12px;border-radius:var(--radius-sm);padding:8px 10px;margin-bottom:1rem;display:none;}
+.auth-msg.error{color:var(--red);background:var(--red-bg);border:1px solid var(--red);display:block;}
+.auth-msg.success{color:var(--green-dark);background:var(--green-bg);border:1px solid var(--green);display:block;}
+
 @media(max-width:640px){
   .topbar{padding:0 1rem;}
   .topbar-progress-wrap{display:none;}
+  .topbar-user{display:none;}
   .container{padding:1rem;}
   .sprint-mini-bar{display:none;}
   .ctrl-divider{display:none;}
@@ -191,13 +216,15 @@ select:focus{border-color:var(--blue);}
       <span class="topbar-progress-label" id="topProgressLabel">0% done</span>
     </div>
     <span class="topbar-badge" id="topBadge">10 Sprints · 377 SP</span>
+    <span class="topbar-user" id="topbarUserEmail" style="display:none;"></span>
+    <button class="btn" id="signOutBtn" style="display:none;" onclick="signOut()"><i class="ti ti-logout" aria-hidden="true"></i><span>Sign out</span></button>
   </div>
 </header>
 
 <main class="container" role="main">
   <div class="hero">
     <h1 class="hero-title">Project Sprint Board</h1>
-    <p class="hero-sub">Ahmed Foods digital ecosystem — website, trade portal, mobile app &amp; ERP integrations. Click any status button to update ticket progress. Progress is saved automatically in your browser.</p>
+    <p class="hero-sub">Ahmed Foods digital ecosystem — website, trade portal, mobile app &amp; ERP integrations. Click any status button to update ticket progress. Progress is saved to your account.</p>
     <div class="stats-grid" id="statsGrid"></div>
   </div>
 
@@ -270,11 +297,43 @@ select:focus{border-color:var(--blue);}
 </main>
 
 <footer class="footer">
-  <p>Prepared by <a href="https://kreytivestudio.com" target="_blank" rel="noopener">Kreytive Agency</a> · Samuel Anyomi, CTO · <a href="mailto:kreytivestudio@gmail.com">kreytivestudio@gmail.com</a> · Confidential · Progress saved in browser localStorage</p>
+  <p>Prepared by <a href="https://kreytivestudio.com" target="_blank" rel="noopener">Kreytive Agency</a> · Samuel Anyomi, CTO · <a href="mailto:kreytivestudio@gmail.com">kreytivestudio@gmail.com</a> · Confidential</p>
 </footer>
 
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="authHeading">
+    <div class="auth-brand">Kreytive Agency</div>
+    <h2 class="auth-title" id="authHeading">Sprint Board</h2>
+    <p class="auth-sub">Sign in to track your progress across devices.</p>
+    <div class="auth-tabs" role="tablist">
+      <button class="auth-tab active" id="tabLogin" role="tab" aria-selected="true" onclick="switchTab('login')">Sign in</button>
+      <button class="auth-tab" id="tabRegister" role="tab" aria-selected="false" onclick="switchTab('register')">Create account</button>
+    </div>
+    <div class="auth-msg" id="authMsg"></div>
+    <div class="auth-field">
+      <label for="authEmail">Email</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label for="authPassword">Password</label>
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')submitAuth()">
+    </div>
+    <button class="auth-submit" id="authSubmit" onclick="submitAuth()">Sign in</button>
+  </div>
+</div>
+
 <script>
-const STORAGE_KEY = 'ahmed_foods_sprint_v1';
+// ── Supabase ──────────────────────────────────────────────────────────────────
+const { createClient } = window.supabase;
+const db = createClient(
+  'https://xpjysmfzpcvlohsvqsne.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwanlzbWZ6cGN2bG9oc3Zxc25lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDkwODMsImV4cCI6MjA5NjY4NTA4M30.YGfNtok3T65efZ7XbEtkiqd99xBYRBYBupDZZuO_pjQ'
+);
+
+let currentUser = null;
+let ticketState = {};
+
 const STATUSES = [
   { key:'todo',       label:'To Do',       icon:'ti-circle',         cls:'active-todo'       },
   { key:'inprogress', label:'In Progress', icon:'ti-player-play',    cls:'active-inprogress' },
@@ -451,28 +510,100 @@ const sprints = [
   ]},
 ];
 
-// ── Storage ───────────────────────────────────────────────────────────────────
-function loadState() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
-  catch(e) { return {}; }
-}
-function saveState(state) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
-}
-function getTicketStatus(id) {
-  return loadState()[id] || { status:'todo', updatedAt: null };
-}
-function setTicketStatus(id, status) {
-  const state = loadState();
-  state[id] = { status, updatedAt: new Date().toISOString() };
-  saveState(state);
-}
-
 // ── Counts ────────────────────────────────────────────────────────────────────
 const totalSP = sprints.reduce((a,s)=>a+s.sp,0);
 const totalTickets = sprints.reduce((a,s)=>a+s.tickets.length,0);
-const criticalCount = sprints.reduce((a,s)=>a+s.tickets.filter(t=>t.priority==='Critical').length,0);
-const highCount = sprints.reduce((a,s)=>a+s.tickets.filter(t=>t.priority==='High').length,0);
+
+// ── Supabase data layer ───────────────────────────────────────────────────────
+function loadState() { return ticketState; }
+
+async function setTicketStatus(id, status) {
+  ticketState[id] = { status, updatedAt: new Date().toISOString() };
+  if (currentUser) {
+    await db.from('ticket_status').upsert(
+      { user_id: currentUser.id, ticket_id: id, status, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id,ticket_id' }
+    );
+  }
+}
+
+async function loadFromSupabase() {
+  const { data } = await db.from('ticket_status').select('ticket_id, status, updated_at');
+  ticketState = {};
+  (data || []).forEach(r => {
+    ticketState[r.ticket_id] = { status: r.status, updatedAt: r.updated_at };
+  });
+}
+
+// ── Auth UI ───────────────────────────────────────────────────────────────────
+let authMode = 'login';
+
+function switchTab(mode) {
+  authMode = mode;
+  document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
+  document.getElementById('tabLogin').setAttribute('aria-selected', String(mode === 'login'));
+  document.getElementById('tabRegister').setAttribute('aria-selected', String(mode === 'register'));
+  document.getElementById('authSubmit').textContent = mode === 'login' ? 'Sign in' : 'Create account';
+  clearAuthMsg();
+}
+
+function setAuthMsg(text, type) {
+  const el = document.getElementById('authMsg');
+  el.textContent = text;
+  el.className = 'auth-msg ' + type;
+}
+
+function clearAuthMsg() {
+  const el = document.getElementById('authMsg');
+  el.textContent = '';
+  el.className = 'auth-msg';
+}
+
+async function submitAuth() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  const btn = document.getElementById('authSubmit');
+
+  if (!email || !password) { setAuthMsg('Please enter your email and password.', 'error'); return; }
+
+  btn.disabled = true;
+  btn.textContent = authMode === 'login' ? 'Signing in…' : 'Creating account…';
+  clearAuthMsg();
+
+  if (authMode === 'login') {
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    if (error) { setAuthMsg(error.message, 'error'); btn.disabled = false; btn.textContent = 'Sign in'; }
+  } else {
+    const { error } = await db.auth.signUp({ email, password });
+    if (error) {
+      setAuthMsg(error.message, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Create account';
+    } else {
+      setAuthMsg('Account created! Check your email to confirm, then sign in.', 'success');
+      switchTab('login');
+      btn.disabled = false;
+    }
+  }
+}
+
+async function signOut() {
+  await db.auth.signOut();
+}
+
+function showAuthModal() {
+  document.getElementById('authOverlay').classList.remove('hidden');
+  document.getElementById('topbarUserEmail').style.display = 'none';
+  document.getElementById('signOutBtn').style.display = 'none';
+}
+
+function hideAuthModal() {
+  document.getElementById('authOverlay').classList.add('hidden');
+  document.getElementById('topbarUserEmail').style.display = '';
+  document.getElementById('topbarUserEmail').textContent = currentUser?.email || '';
+  document.getElementById('signOutBtn').style.display = '';
+}
 
 // ── Init week filter ──────────────────────────────────────────────────────────
 const weekSelect = document.getElementById('filterWeek');
@@ -532,8 +663,8 @@ function updateGlobalProgress() {
 }
 
 // ── Cycle status ──────────────────────────────────────────────────────────────
-function cycleStatus(ticketId, newStatus) {
-  setTicketStatus(ticketId, newStatus);
+async function cycleStatus(ticketId, newStatus) {
+  await setTicketStatus(ticketId, newStatus);
   updateGlobalProgress();
   const ticketEl = document.querySelector(`[data-ticket-id="${ticketId}"]`);
   if (!ticketEl) return;
@@ -569,12 +700,7 @@ function updateSprintBar(sprintBlock) {
   tickets.forEach(t => { if((state[t.dataset.ticketId]||{}).status==='done') done++; });
   const pct = tickets.length ? Math.round((done/tickets.length)*100) : 0;
   const fill = sprintBlock.querySelector('.sprint-mini-fill');
-  const meta = sprintBlock.querySelector('.sprint-meta');
   if(fill) fill.style.width = pct+'%';
-  const spTotal = Array.from(tickets).reduce((a,t)=>{
-    const sp = parseInt(t.querySelector('.badge-sp')?.textContent)||0;
-    return a+sp;
-  },0);
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
@@ -704,9 +830,12 @@ function resetFilters() {
   document.getElementById('filterStatus').value='';
   render();
 }
-function confirmClearAll() {
+async function confirmClearAll() {
   if(confirm('Clear all saved ticket progress? This cannot be undone.')) {
-    localStorage.removeItem(STORAGE_KEY);
+    if (currentUser) {
+      await db.from('ticket_status').delete().eq('user_id', currentUser.id);
+    }
+    ticketState = {};
     updateGlobalProgress();
     render();
   }
@@ -716,8 +845,37 @@ function confirmClearAll() {
   document.getElementById(id).addEventListener(id==='search'?'input':'change', render);
 });
 
-updateGlobalProgress();
-render();
+// ── Bootstrap ─────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadFromSupabase();
+    hideAuthModal();
+  } else {
+    showAuthModal();
+  }
+  updateGlobalProgress();
+  render();
+
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN') {
+      currentUser = session.user;
+      await loadFromSupabase();
+      hideAuthModal();
+      updateGlobalProgress();
+      render();
+    } else if (event === 'SIGNED_OUT') {
+      currentUser = null;
+      ticketState = {};
+      showAuthModal();
+      updateGlobalProgress();
+      render();
+    }
+  });
+}
+
+init();
 </script>
 </body>
 </html>
