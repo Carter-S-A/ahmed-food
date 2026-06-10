@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ahmed Foods — Sprint Board | Kreytive Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue:#1446A0; --blue-light:#EEF3FB; --blue-mid:#c8d9f5;
+  --green:#1A7A4A; --green-bg:#E6F5EE; --green-dark:#0F5132;
+  --amber:#B45309; --amber-bg:#FFF8E8;
+  --red:#B91C1C; --red-bg:#FEF2F2;
+  --purple:#6D28D9; --purple-bg:#F3EEFF;
+  --todo-c:#6B7280; --todo-bg:#F3F4F6;
+  --inprog-c:#1446A0; --inprog-bg:#EEF3FB;
+  --review-c:#B45309; --review-bg:#FFF8E8;
+  --done-c:#1A7A4A; --done-bg:#E6F5EE;
+  --text-primary:#111827; --text-secondary:#6B7280; --text-tertiary:#9CA3AF;
+  --bg-primary:#ffffff; --bg-secondary:#F9FAFB; --bg-tertiary:#F3F4F6;
+  --border:#E5E7EB; --border-hover:#D1D5DB;
+  --radius-sm:6px; --radius-md:8px; --radius-lg:12px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+}
+@media(prefers-color-scheme:dark){:root{
+  --blue:#5B8DEF; --blue-light:#1a2540; --blue-mid:#1e3160;
+  --green:#34D47A; --green-bg:#0f2e1e; --green-dark:#34D47A;
+  --amber:#FBBF24; --amber-bg:#2d1f06;
+  --red:#F87171; --red-bg:#2d1010;
+  --purple:#A78BFA; --purple-bg:#1e1535;
+  --todo-c:#9CA3AF; --todo-bg:#374151;
+  --inprog-c:#5B8DEF; --inprog-bg:#1a2540;
+  --review-c:#FBBF24; --review-bg:#2d1f06;
+  --done-c:#34D47A; --done-bg:#0f2e1e;
+  --text-primary:#F9FAFB; --text-secondary:#9CA3AF; --text-tertiary:#6B7280;
+  --bg-primary:#111827; --bg-secondary:#1F2937; --bg-tertiary:#374151;
+  --border:#374151; --border-hover:#4B5563;
+}}
+html{font-size:15px;}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-secondary);color:var(--text-primary);line-height:1.6;min-height:100vh;}
+
+/* TOPBAR */
+.topbar{background:var(--bg-primary);border-bottom:1px solid var(--border);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.topbar-logo{font-size:14px;font-weight:600;color:var(--blue);letter-spacing:-0.01em;}
+.topbar-divider{width:1px;height:20px;background:var(--border);}
+.topbar-project{font-size:13px;color:var(--text-secondary);}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.topbar-badge{font-size:11px;font-weight:500;background:var(--blue-light);color:var(--blue);padding:3px 10px;border-radius:20px;}
+.topbar-progress-wrap{display:flex;align-items:center;gap:8px;}
+.topbar-progress-bar{width:120px;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.topbar-progress-fill{height:6px;background:var(--green);border-radius:3px;transition:width 0.4s ease;}
+.topbar-progress-label{font-size:12px;color:var(--text-secondary);white-space:nowrap;font-family:'JetBrains Mono',monospace;}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* STATS */
+.hero{margin-bottom:2rem;}
+.hero-title{font-size:22px;font-weight:600;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:4px;}
+.hero-sub{font-size:14px;color:var(--text-secondary);margin-bottom:1.5rem;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem;}
+.stat-card{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow-sm);}
+.stat-label{font-size:11px;color:var(--text-secondary);margin-bottom:5px;display:flex;align-items:center;gap:4px;}
+.stat-label i{font-size:12px;}
+.stat-value{font-size:26px;font-weight:600;color:var(--text-primary);letter-spacing:-0.03em;font-variant-numeric:tabular-nums;}
+.stat-sub{font-size:11px;color:var(--text-tertiary);margin-top:2px;}
+
+/* OVERALL PROGRESS CARD */
+.progress-card{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;box-shadow:var(--shadow-sm);margin-bottom:1.5rem;}
+.progress-card-title{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.progress-card-title span{font-size:12px;font-weight:400;color:var(--text-secondary);}
+.status-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.status-bar-item{display:flex;flex-direction:column;gap:4px;}
+.status-bar-label{font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:space-between;}
+.status-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.status-bar-fill{height:6px;border-radius:3px;transition:width 0.4s ease;}
+
+/* CONTROLS */
+.controls{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem;box-shadow:var(--shadow-sm);}
+.search-wrap{flex:1;min-width:180px;position:relative;}
+.search-wrap i{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text-tertiary);pointer-events:none;}
+.search-wrap input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary);color:var(--text-primary);font-size:13px;font-family:inherit;outline:none;transition:border-color 0.15s;}
+.search-wrap input:focus{border-color:var(--blue);background:var(--bg-primary);}
+select{padding:7px 26px 7px 9px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary);color:var(--text-primary);font-size:13px;font-family:inherit;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;transition:border-color 0.15s;}
+select:focus{border-color:var(--blue);}
+.btn{padding:7px 12px;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--bg-secondary);color:var(--text-secondary);font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s;white-space:nowrap;}
+.btn:hover{background:var(--bg-tertiary);color:var(--text-primary);border-color:var(--border-hover);}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue);}
+.btn-primary:hover{opacity:0.88;color:#fff;}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+.btn-danger:hover{opacity:0.85;}
+.ctrl-divider{width:1px;height:26px;background:var(--border);}
+
+/* SPRINT */
+.sprint-block{background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;box-shadow:var(--shadow-sm);overflow:hidden;transition:box-shadow 0.15s;}
+.sprint-block:hover{box-shadow:var(--shadow-md);}
+.sprint-header{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;border-bottom:1px solid transparent;transition:background 0.1s,border-color 0.1s;}
+.sprint-header:hover{background:var(--bg-secondary);}
+.sprint-header.open{border-bottom-color:var(--border);}
+.sprint-week-badge{font-size:11px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--blue);background:var(--blue-light);padding:3px 9px;border-radius:var(--radius-sm);white-space:nowrap;letter-spacing:0.02em;}
+.sprint-week-badge.golive{background:var(--green-bg);color:var(--green);}
+.sprint-title{font-size:14px;font-weight:500;color:var(--text-primary);flex:1;}
+.sprint-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sprint-mini-bar{width:70px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.sprint-mini-fill{height:5px;background:var(--green);border-radius:3px;transition:width 0.4s;}
+.sprint-meta{font-size:12px;color:var(--text-secondary);font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.sprint-chevron{font-size:16px;color:var(--text-tertiary);transition:transform 0.2s;flex-shrink:0;}
+.sprint-chevron.open{transform:rotate(180deg);}
+
+/* TICKETS */
+.tickets-list{padding:8px;display:none;}
+.tickets-list.open{display:block;}
+.ticket{border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:7px;background:var(--bg-primary);transition:border-color 0.1s,box-shadow 0.1s;position:relative;}
+.ticket:last-child{margin-bottom:0;}
+.ticket:hover{border-color:var(--border-hover);box-shadow:var(--shadow-sm);}
+.ticket.status-done{opacity:0.65;}
+.ticket.status-done .ticket-title{text-decoration:line-through;color:var(--text-tertiary);}
+.ticket-top{display:flex;align-items:flex-start;gap:9px;margin-bottom:8px;}
+.ticket-id{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--blue);background:var(--blue-light);padding:3px 7px;border-radius:var(--radius-sm);white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.ticket-title{font-size:14px;font-weight:500;color:var(--text-primary);flex:1;line-height:1.4;}
+.ticket-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;}
+.badge i{font-size:11px;}
+.badge-role{background:var(--bg-tertiary);color:var(--text-secondary);}
+.badge-sp{background:var(--bg-tertiary);color:var(--text-primary);font-family:'JetBrains Mono',monospace;}
+.badge-critical{background:var(--red-bg);color:var(--red);}
+.badge-high{background:var(--amber-bg);color:var(--amber);}
+.badge-medium{background:var(--bg-tertiary);color:var(--text-secondary);}
+.ticket-ac{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 11px;margin-bottom:10px;}
+.ac-label{font-size:10px;font-weight:600;letter-spacing:0.07em;color:var(--text-tertiary);text-transform:uppercase;margin-bottom:3px;}
+.ac-text{font-size:13px;color:var(--text-secondary);line-height:1.55;}
+
+/* STATUS CONTROL */
+.ticket-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.status-btn-group{display:flex;gap:4px;}
+.status-btn{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;border:1.5px solid transparent;cursor:pointer;font-family:inherit;transition:all 0.15s;display:flex;align-items:center;gap:4px;background:var(--bg-tertiary);color:var(--text-secondary);}
+.status-btn:hover{filter:brightness(0.95);}
+.status-btn.active-todo{background:var(--todo-bg);color:var(--todo-c);border-color:var(--todo-c);}
+.status-btn.active-inprogress{background:var(--inprog-bg);color:var(--inprog-c);border-color:var(--inprog-c);}
+.status-btn.active-inreview{background:var(--review-bg);color:var(--review-c);border-color:var(--review-c);}
+.status-btn.active-done{background:var(--done-bg);color:var(--done-c);border-color:var(--done-c);}
+.status-current{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-flex;align-items:center;gap:4px;}
+.status-todo{background:var(--todo-bg);color:var(--todo-c);}
+.status-inprogress{background:var(--inprog-bg);color:var(--inprog-c);}
+.status-inreview{background:var(--review-bg);color:var(--review-c);}
+.status-done{background:var(--done-bg);color:var(--done-c);}
+.ticket-updated{font-size:11px;color:var(--text-tertiary);font-style:italic;}
+
+/* LEGEND / FOOTER */
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:1.5rem;padding:11px 14px;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);align-items:center;}
+.legend-section{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.legend-label{font-size:11px;font-weight:600;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.06em;}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary);}
+.legend-div{width:1px;height:20px;background:var(--border);}
+.sp-pill{font-size:11px;font-weight:500;font-family:'JetBrains Mono',monospace;padding:2px 7px;border-radius:4px;border:1px solid var(--border);color:var(--text-secondary);}
+.result-meta{font-size:12px;color:var(--text-tertiary);margin-bottom:1rem;padding-left:2px;}
+.empty{text-align:center;padding:4rem 2rem;color:var(--text-secondary);}
+.empty i{font-size:36px;display:block;margin-bottom:10px;color:var(--text-tertiary);}
+.empty p{font-size:14px;}
+.footer{text-align:center;padding:2rem 0 1rem;font-size:12px;color:var(--text-tertiary);}
+.footer a{color:var(--blue);text-decoration:none;}
+.footer a:hover{text-decoration:underline;}
+@media(max-width:640px){
+  .topbar{padding:0 1rem;}
+  .topbar-progress-wrap{display:none;}
+  .container{padding:1rem;}
+  .sprint-mini-bar{display:none;}
+  .ctrl-divider{display:none;}
+  .status-btn span{display:none;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar" role="banner">
+  <div class="topbar-left">
+    <span class="topbar-logo">Kreytive Agency</span>
+    <div class="topbar-divider" aria-hidden="true"></div>
+    <span class="topbar-project">Ahmed Foods — Sprint Board</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-progress-wrap" aria-label="Overall project progress">
+      <div class="topbar-progress-bar"><div class="topbar-progress-fill" id="topProgressFill" style="width:0%"></div></div>
+      <span class="topbar-progress-label" id="topProgressLabel">0% done</span>
+    </div>
+    <span class="topbar-badge" id="topBadge">10 Sprints · 377 SP</span>
+  </div>
+</header>
+
+<main class="container" role="main">
+  <div class="hero">
+    <h1 class="hero-title">Project Sprint Board</h1>
+    <p class="hero-sub">Ahmed Foods digital ecosystem — website, trade portal, mobile app &amp; ERP integrations. Click any status button to update ticket progress. Progress is saved automatically in your browser.</p>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+
+  <div class="progress-card">
+    <div class="progress-card-title">Overall status breakdown <span id="progressSummaryText"></span></div>
+    <div class="status-bars" id="statusBars"></div>
+  </div>
+
+  <div class="legend">
+    <span class="legend-label">Status</span>
+    <div class="legend-section">
+      <span class="legend-item"><span class="legend-dot" style="background:var(--todo-c)"></span>To Do</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--inprog-c)"></span>In Progress</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--review-c)"></span>In Review</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--done-c)"></span>Done</span>
+    </div>
+    <div class="legend-div" aria-hidden="true"></div>
+    <span class="legend-label">Priority</span>
+    <div class="legend-section">
+      <span class="legend-item"><span class="legend-dot" style="background:var(--red)"></span>Critical</span>
+      <span class="legend-item"><span class="legend-dot" style="background:var(--amber)"></span>High</span>
+      <span class="legend-item"><span class="legend-dot" style="background:#9CA3AF"></span>Medium</span>
+    </div>
+    <div class="legend-div" aria-hidden="true"></div>
+    <span class="legend-label">SP</span>
+    <span class="sp-pill">1 trivial</span>
+    <span class="sp-pill">3 moderate</span>
+    <span class="sp-pill">5 complex</span>
+    <span class="sp-pill">8 very complex</span>
+  </div>
+
+  <div class="controls" role="search">
+    <div class="search-wrap">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" id="search" placeholder="Search tickets…" aria-label="Search tickets">
+    </div>
+    <select id="filterWeek" aria-label="Filter by week"></select>
+    <select id="filterPriority" aria-label="Filter by priority">
+      <option value="">All priorities</option>
+      <option value="Critical">Critical</option>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+    </select>
+    <select id="filterRole" aria-label="Filter by role">
+      <option value="">All roles</option>
+      <option value="Backend Dev">Backend Dev</option>
+      <option value="Frontend Dev">Frontend Dev</option>
+      <option value="Mobile Dev">Mobile Dev</option>
+      <option value="Designer">Designer</option>
+      <option value="DevOps">DevOps</option>
+      <option value="PM">PM</option>
+      <option value="Lead Dev">Lead Dev</option>
+    </select>
+    <select id="filterStatus" aria-label="Filter by status">
+      <option value="">All statuses</option>
+      <option value="todo">To Do</option>
+      <option value="inprogress">In Progress</option>
+      <option value="inreview">In Review</option>
+      <option value="done">Done</option>
+    </select>
+    <div class="ctrl-divider" aria-hidden="true"></div>
+    <button class="btn" onclick="expandAll()"><i class="ti ti-layout-list" aria-hidden="true"></i><span>Expand all</span></button>
+    <button class="btn" onclick="collapseAll()"><i class="ti ti-layout-navbar" aria-hidden="true"></i><span>Collapse</span></button>
+    <button class="btn btn-primary" onclick="resetFilters()"><i class="ti ti-refresh" aria-hidden="true"></i><span>Reset</span></button>
+    <button class="btn btn-danger" onclick="confirmClearAll()" title="Clear all saved status data"><i class="ti ti-trash" aria-hidden="true"></i><span>Clear progress</span></button>
+  </div>
+
+  <p class="result-meta" id="resultMeta"></p>
+  <div id="board" role="list"></div>
+</main>
+
+<footer class="footer">
+  <p>Prepared by <a href="https://kreytivestudio.com" target="_blank" rel="noopener">Kreytive Agency</a> · Samuel Anyomi, CTO · <a href="mailto:kreytivestudio@gmail.com">kreytivestudio@gmail.com</a> · Confidential · Progress saved in browser localStorage</p>
+</footer>
+
+<script>
+const STORAGE_KEY = 'ahmed_foods_sprint_v1';
+const STATUSES = [
+  { key:'todo',       label:'To Do',       icon:'ti-circle',         cls:'active-todo'       },
+  { key:'inprogress', label:'In Progress', icon:'ti-player-play',    cls:'active-inprogress' },
+  { key:'inreview',   label:'In Review',   icon:'ti-eye',            cls:'active-inreview'   },
+  { key:'done',       label:'Done',        icon:'ti-circle-check',   cls:'active-done'       },
+];
+
+// ── Data ──────────────────────────────────────────────────────────────────────
+const sprints = [
+  {week:'Week 1',goal:'Discovery & Foundation',sp:34,tickets:[
+    {id:'W1-001',task:'Technical discovery session with Ahmed Foods',role:'PM + Lead Dev',sp:3,priority:'Critical',ac:'Meeting held. ERP system identified. All client questions answered. Notes documented and shared with full team.'},
+    {id:'W1-002',task:'Confirm ERP system and obtain API documentation',role:'Lead Dev',sp:3,priority:'Critical',ac:'ERP vendor confirmed. API docs obtained or unavailability flagged. Integration complexity assessed.'},
+    {id:'W1-003',task:'Collect brand assets from client (logo, colours, fonts)',role:'PM',sp:1,priority:'Critical',ac:'Logo in SVG/PNG received. Brand colour hex codes confirmed. Font files confirmed.'},
+    {id:'W1-004',task:'Collect product data file from client',role:'PM',sp:2,priority:'Critical',ac:'Product spreadsheet/export received. Completeness assessed. Missing fields flagged to client.'},
+    {id:'W1-005',task:'Collect existing customer pricing data',role:'PM',sp:2,priority:'Critical',ac:'Pricing agreements received. At least 3 sample customer accounts documented.'},
+    {id:'W1-006',task:'Set up GitHub repository and branching strategy',role:'Lead Dev',sp:1,priority:'Critical',ac:'Repo created. Branches: main, develop, staging. Branch protection on main. Team access granted.'},
+    {id:'W1-007',task:'Set up project board (Linear or Notion)',role:'PM',sp:1,priority:'High',ac:'All sprint tickets created and labelled. Team and client have view access.'},
+    {id:'W1-008',task:'Provision Hostinger VPS — OS, Nginx, Node.js, PostgreSQL, Redis',role:'DevOps',sp:5,priority:'Critical',ac:'Ubuntu 24 installed. Nginx running. Node.js 20 LTS. PostgreSQL 16. Redis 7. Accessible internally only.'},
+    {id:'W1-009',task:'Set up staging and production environments on VPS',role:'DevOps',sp:3,priority:'Critical',ac:'Two environments configured. PM2 installed. Staging URL accessible to team.'},
+    {id:'W1-010',task:'Configure CI/CD pipeline — GitHub Actions to VPS',role:'Lead Dev',sp:3,priority:'High',ac:'Push to develop auto-deploys to staging. Push to main triggers manual approval then production.'},
+    {id:'W1-011',task:'Install and configure Meilisearch on VPS',role:'DevOps',sp:2,priority:'High',ac:'Meilisearch running on port 7700. Master API key set. Internal access only.'},
+    {id:'W1-012',task:'Set up Cloudflare R2 bucket for file storage',role:'DevOps',sp:2,priority:'High',ac:'R2 bucket created. API keys generated. Test image served via Cloudflare CDN.'},
+    {id:'W1-013',task:'Begin wireframes — public website pages',role:'Designer',sp:3,priority:'High',ac:'Wireframes for Home, About, Products, Cash & Carry, Contact drafted in Figma.'},
+    {id:'W1-014',task:'Draft PostgreSQL database schema',role:'Backend Dev',sp:3,priority:'High',ac:'ERD drafted covering all main entities. Reviewed by lead dev.'},
+  ]},
+  {week:'Week 2',goal:'Design Sprint — All designs signed off before build',sp:38,tickets:[
+    {id:'W2-001',task:'Complete wireframes — all 12 website pages',role:'Designer',sp:3,priority:'Critical',ac:'All 12 public pages wireframed in Figma.'},
+    {id:'W2-002',task:'Complete wireframes — trade portal all screens',role:'Designer',sp:3,priority:'Critical',ac:'Login, Dashboard, Browse, Basket, Checkout, Order History, Account all wireframed.'},
+    {id:'W2-003',task:'Complete wireframes — mobile app all screens',role:'Designer',sp:3,priority:'Critical',ac:'All app screens wireframed including onboarding, browse, search, basket, checkout, account.'},
+    {id:'W2-004',task:'Client wireframe review and approval',role:'PM + Client',sp:1,priority:'Critical',ac:'Client reviewed all wireframes. Feedback incorporated. Written approval received before hi-fi begins.'},
+    {id:'W2-005',task:'High-fidelity UI design — public website',role:'Designer',sp:5,priority:'Critical',ac:'All 12 pages at 1440px desktop and 375px mobile. Hover states included.'},
+    {id:'W2-006',task:'High-fidelity UI design — trade portal',role:'Designer',sp:5,priority:'Critical',ac:'All portal screens at 1280px. Customer pricing display mocked. Admin screens included.'},
+    {id:'W2-007',task:'High-fidelity UI design — mobile app',role:'Designer',sp:5,priority:'Critical',ac:'All app screens at 390px. Dark/light mode considered. Biometric prompt included.'},
+    {id:'W2-008',task:'Client design sign-off — all platforms',role:'PM + Client',sp:1,priority:'Critical',ac:'Written sign-off received. No further design changes without formal change request.'},
+    {id:'W2-009',task:'Finalise PostgreSQL schema — all tables, indexes, foreign keys',role:'Backend Dev',sp:3,priority:'Critical',ac:'14 tables, all indexes and foreign keys defined.'},
+    {id:'W2-010',task:'Finalise NestJS API contract — all endpoints documented',role:'Backend Dev',sp:3,priority:'High',ac:'API contract in Postman/Swagger. All endpoints documented and shared with team.'},
+    {id:'W2-011',task:'Scaffold NestJS project with TypeScript and all modules',role:'Backend Dev',sp:3,priority:'High',ac:'8 modules. TypeScript strict mode. ESLint + Prettier configured.'},
+    {id:'W2-012',task:'Set up Next.js project with Tailwind and routing',role:'Frontend Dev',sp:3,priority:'High',ac:'Next.js 14 created. Tailwind configured. Env variables for staging and production set.'},
+  ]},
+  {week:'Week 3',goal:'Backend Core — Auth, products API, website pages started',sp:46,tickets:[
+    {id:'W3-001',task:'PostgreSQL migrations — all tables live on staging',role:'Backend Dev',sp:2,priority:'Critical',ac:'All tables on staging DB. Migrations in version control. Rollback scripts tested.'},
+    {id:'W3-002',task:'JWT authentication — login and register endpoints',role:'Backend Dev',sp:3,priority:'Critical',ac:'POST /auth/login returns access (15min) and refresh (7d) tokens. Register creates account.'},
+    {id:'W3-003',task:'JWT refresh token rotation',role:'Backend Dev',sp:2,priority:'Critical',ac:'POST /auth/refresh issues new token. Old invalidated. HttpOnly cookie. Replay attack tested.'},
+    {id:'W3-004',task:'RBAC — roles and permission guards',role:'Backend Dev',sp:3,priority:'Critical',ac:'3 roles: super_admin, staff, trade_customer. Guards on all protected routes. 403 on unauthorised.'},
+    {id:'W3-005',task:'Password reset flow',role:'Backend Dev',sp:2,priority:'High',ac:'Forgot password sends token via Resend. Reset validates and updates. 1hr expiry.'},
+    {id:'W3-006',task:'Products API — full CRUD endpoints',role:'Backend Dev',sp:3,priority:'Critical',ac:'GET/POST/PUT/DELETE /products all functional with validation and pagination.'},
+    {id:'W3-007',task:'Product categories and subcategories API',role:'Backend Dev',sp:2,priority:'High',ac:'GET /categories returns nested tree. Products linkable to categories.'},
+    {id:'W3-008',task:'Product filtering API — multi-dimensional filters',role:'Backend Dev',sp:3,priority:'High',ac:'Filters combinable. Performance tested with 3,000 seeded products.'},
+    {id:'W3-009',task:'Meilisearch product index — auto-sync on changes',role:'Backend Dev',sp:3,priority:'High',ac:'Index updates via NestJS events. Search under 100ms. Typo tolerance enabled.'},
+    {id:'W3-010',task:'Cloudflare R2 — product image upload endpoint',role:'Backend Dev',sp:2,priority:'High',ac:'Images uploaded to R2. CDN URL returned. Resized to 800px and 400px thumbnails.'},
+    {id:'W3-011',task:'Redis caching — product listings and sessions',role:'Backend Dev',sp:2,priority:'High',ac:'Product lists cached 30min. Cache invalidated on update.'},
+    {id:'W3-012',task:'Build Home page — Next.js',role:'Frontend Dev',sp:3,priority:'High',ac:'Hero, categories, promotions, CTA. Responsive at 375/768/1440px.'},
+    {id:'W3-013',task:'Build About page — Next.js',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Company story, values, team. SSG rendering. Meta tags set.'},
+    {id:'W3-014',task:'Build Contact page with form',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Form submits to API. Success/error states. Google Maps embed.'},
+    {id:'W3-015',task:'Seed database — 3,000 sample products',role:'Backend Dev',sp:3,priority:'High',ac:'3,000 products seeded. Meilisearch populated. Available on staging.'},
+    {id:'W3-016',task:'Resend email service — setup and test',role:'Backend Dev',sp:1,priority:'High',ac:'Templates created: order confirmation, account setup, password reset.'},
+  ]},
+  {week:'Week 4',goal:'Pricing Engine + Product Catalogue — Core B2B differentiator built',sp:52,tickets:[
+    {id:'W4-001',task:'Customer-specific pricing engine — core logic',role:'Backend Dev',sp:8,priority:'Critical',ac:'Each authenticated user sees only their contracted prices. Hierarchy: customer > tier > default. Tested with 5 accounts.'},
+    {id:'W4-002',task:'Tiered pricing structures',role:'Backend Dev',sp:3,priority:'Critical',ac:'Admin creates tiers. Customers assignable. Tier price overrides default.'},
+    {id:'W4-003',task:'Promotional / time-limited pricing',role:'Backend Dev',sp:3,priority:'High',ac:'Admin sets start/end dates. Promo takes priority. Expired promotions revert automatically.'},
+    {id:'W4-004',task:'Customers API — CRUD and company accounts',role:'Backend Dev',sp:3,priority:'Critical',ac:'POST /customers creates trade account with support for multiple child users.'},
+    {id:'W4-005',task:'Admin pricing management — assign prices per customer',role:'Backend Dev',sp:3,priority:'Critical',ac:'Custom price per product per customer. Bulk CSV upload. Changes live immediately.'},
+    {id:'W4-006',task:'Admin product management API',role:'Backend Dev',sp:2,priority:'High',ac:'Bulk update, stock toggle, featured flag. Role-guarded admin-only.'},
+    {id:'W4-007',task:'Product data import — 2,500–3,000 real SKUs',role:'Backend Dev + PM',sp:8,priority:'Critical',ac:'All client products imported. Images in R2. Meilisearch populated. PM verifies 20 random products.'},
+    {id:'W4-008',task:'Build Product Catalogue page — browse, search, filter',role:'Frontend Dev',sp:5,priority:'Critical',ac:'Category nav, instant search, filter sidebar. SSR for SEO. Pagination.'},
+    {id:'W4-009',task:'Build Product Detail page',role:'Frontend Dev',sp:3,priority:'High',ac:'Images, specs, allergens, nutritional info, downloadable spec sheet. Add to basket.'},
+    {id:'W4-010',task:'Build Cash & Carry page',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Opening hours, address, directions, promotions. Google Maps embed.'},
+    {id:'W4-011',task:'Build Delivery Services page',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Coverage, minimum orders, scheduling, service levels. Contact CTA.'},
+    {id:'W4-012',task:'Build Trade Account Registration page',role:'Frontend Dev',sp:3,priority:'High',ac:'Registration form submits to API. Confirmation email triggered. Admin notified.'},
+    {id:'W4-013',task:'Build Promotions & Offers page',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Promotions from backend. Original and discounted prices. Category filter.'},
+    {id:'W4-014',task:'Build FAQ page',role:'Frontend Dev',sp:1,priority:'Medium',ac:'Accordion FAQ. Content via admin CMS. SEO markup.'},
+    {id:'W4-015',task:'SEO — meta tags, Open Graph, structured data',role:'Frontend Dev',sp:2,priority:'High',ac:'next/head meta on all pages. JSON-LD on product pages. Sitemap. Robots.txt.'},
+  ]},
+  {week:'Week 5',goal:'Trade Portal — Full B2B ordering system, payment integrated, UAT begins',sp:55,tickets:[
+    {id:'W5-001',task:'Trade portal — login page and auth flow',role:'Frontend Dev',sp:2,priority:'Critical',ac:'JWT in memory. Refresh in HttpOnly cookie. Redirect on success. Rate limited.'},
+    {id:'W5-002',task:'Trade portal — customer dashboard',role:'Frontend Dev',sp:3,priority:'Critical',ac:'Recent orders, favourites, balance, promotions, quick order CTA.'},
+    {id:'W5-003',task:'Trade portal — product browsing with customer pricing',role:'Frontend Dev',sp:5,priority:'Critical',ac:'Authenticated browse shows only the logged-in customer\'s agreed prices. No other prices visible.'},
+    {id:'W5-004',task:'Trade portal — basket functionality',role:'Frontend Dev',sp:3,priority:'Critical',ac:'Add/remove/update. Persists on refresh. Running total with VAT separate.'},
+    {id:'W5-005',task:'Trade portal — checkout flow (multi-step)',role:'Frontend Dev',sp:5,priority:'Critical',ac:'Steps: basket > address > date > notes > payment > confirmation. Back navigation preserves state.'},
+    {id:'W5-006',task:'Stripe payment gateway integration',role:'Backend Dev',sp:5,priority:'Critical',ac:'Stripe Payment Intents. Test payments on staging. Webhook for confirmation. PCI-compliant.'},
+    {id:'W5-007',task:'Orders API — place, confirm, track',role:'Backend Dev',sp:3,priority:'Critical',ac:'POST /orders creates order. Status: pending > confirmed > processing > dispatched > delivered.'},
+    {id:'W5-008',task:'Trade portal — order history and detail view',role:'Frontend Dev',sp:3,priority:'High',ac:'Order list with date, total, status. Click-through to full detail. Pagination.'},
+    {id:'W5-009',task:'Trade portal — repeat previous order',role:'Frontend Dev',sp:2,priority:'High',ac:'One-click reorder populates basket. Unavailable products flagged.'},
+    {id:'W5-010',task:'Trade portal — saved favourites',role:'Frontend Dev',sp:2,priority:'High',ac:'Save/unsave products. Favourites page. Add all to basket.'},
+    {id:'W5-011',task:'Trade portal — account management',role:'Frontend Dev',sp:2,priority:'High',ac:'Update contact details, delivery addresses, email preferences, password.'},
+    {id:'W5-012',task:'Trade portal — invoice and statement downloads',role:'Frontend Dev + Backend Dev',sp:3,priority:'High',ac:'Invoice PDF generated server-side. Stored in R2. Statements list with download links.'},
+    {id:'W5-013',task:'Trade portal — credit account and balance visibility',role:'Frontend Dev + Backend Dev',sp:2,priority:'High',ac:'Balance, credit limit, outstanding with 30/60/90 day ageing.'},
+    {id:'W5-014',task:'Admin dashboard — product management UI',role:'Frontend Dev',sp:3,priority:'High',ac:'Add/edit/delete products, images, stock visibility. Bulk CSV import.'},
+    {id:'W5-015',task:'Admin dashboard — customer and pricing management UI',role:'Frontend Dev',sp:3,priority:'High',ac:'View all customers, create/edit accounts, assign tiers, set prices. Audit log.'},
+    {id:'W5-016',task:'Admin dashboard — promotions management UI',role:'Frontend Dev',sp:2,priority:'Medium',ac:'Create promotions with product, %, start/end dates. Live preview.'},
+    {id:'W5-017',task:'Client UAT — staging review begins',role:'PM + Client',sp:1,priority:'Critical',ac:'Client given staging URL. UAT session held. Feedback logged in project board.'},
+  ]},
+  {week:'Week 6',goal:'🚀 Phase 1 Go-Live — Website & Trade Portal',sp:34,tickets:[
+    {id:'W6-001',task:'UAT bug fixes — all critical and high issues resolved',role:'Full Dev Team',sp:8,priority:'Critical',ac:'All Critical and High UAT bugs resolved and re-tested. Updated written sign-off received.'},
+    {id:'W6-002',task:'Security audit — input validation, CORS, rate limiting',role:'Lead Dev',sp:3,priority:'Critical',ac:'All inputs validated. CORS whitelist set. Rate limiting on auth. SQL injection and XSS passed.'},
+    {id:'W6-003',task:'GDPR compliance — cookie consent, privacy policy, data deletion',role:'Lead Dev',sp:2,priority:'Critical',ac:'Cookie consent banner. Privacy policy live. Right-to-erasure endpoint. Retention documented.'},
+    {id:'W6-004',task:'SSL and Cloudflare full configuration',role:'DevOps',sp:2,priority:'Critical',ac:'Cloudflare SSL Full Strict. HTTPS enforced. HSTS enabled. SSL Labs score A or above.'},
+    {id:'W6-005',task:'Google Search Console and Analytics 4 setup',role:'Frontend Dev',sp:1,priority:'High',ac:'GSC verified. Sitemap submitted. GA4 tracking firing on all key events.'},
+    {id:'W6-006',task:'Performance testing — 100 concurrent users',role:'Lead Dev',sp:3,priority:'High',ac:'P95 response under 800ms. No crashes. Redis cache hit rate above 70%.'},
+    {id:'W6-007',task:'Staff training — admin dashboard walkthrough',role:'PM',sp:1,priority:'Critical',ac:'Training held. Products, customers, pricing, promotions covered. Recording provided.'},
+    {id:'W6-008',task:'Final client sign-off — website and trade portal',role:'PM + Client',sp:1,priority:'Critical',ac:'Written sign-off received. All UAT issues closed before DNS cutover.'},
+    {id:'W6-009',task:'DNS cutover — go live on production domain',role:'DevOps',sp:2,priority:'Critical',ac:'DNS updated. Propagation confirmed. No downtime during cutover.'},
+    {id:'W6-010',task:'Post-launch monitoring — 48-hour watch',role:'Full Team',sp:3,priority:'Critical',ac:'UptimeRobot and Sentry active. P1 issues within 2 hours. Daily status to client.'},
+    {id:'W6-011',task:'Invoice milestone 3 — 20% payment (£25,100)',role:'PM',sp:1,priority:'Critical',ac:'Invoice sent on go-live day. 7-day payment terms.'},
+    {id:'W6-012',task:'Automated backup — test restore procedure',role:'DevOps',sp:2,priority:'High',ac:'Daily backup to R2. Test restore successful. Recovery under 30 minutes documented.'},
+    {id:'W6-013',task:'News and Careers placeholder pages',role:'Frontend Dev',sp:1,priority:'Medium',ac:'Placeholder pages live. No 404 errors. Proper meta tags.'},
+  ]},
+  {week:'Week 7',goal:'Mobile App — Foundation, auth, product catalogue, pricing',sp:42,tickets:[
+    {id:'W7-001',task:'React Native project setup — Expo, TypeScript, navigation',role:'Mobile Dev',sp:2,priority:'Critical',ac:'React Navigation v6. Folder structure defined. Runs on iOS and Android simulators.'},
+    {id:'W7-002',task:'State management setup — Redux Toolkit or Zustand',role:'Mobile Dev',sp:2,priority:'High',ac:'Slices: auth, products, cart, orders, notifications. Persisted state for auth and cart.'},
+    {id:'W7-003',task:'API client setup — Axios + React Query',role:'Mobile Dev',sp:2,priority:'High',ac:'JWT injection interceptor. 401 auto-refresh. React Query for all data fetching.'},
+    {id:'W7-004',task:'Login screen',role:'Mobile Dev',sp:2,priority:'Critical',ac:'Connects to POST /auth/login. Token in Expo SecureStore. Error messages shown.'},
+    {id:'W7-005',task:'Biometric login — Face ID and Fingerprint',role:'Mobile Dev',sp:2,priority:'High',ac:'Expo LocalAuthentication. Falls back to PIN. Toggle in account settings.'},
+    {id:'W7-006',task:'Registration screen',role:'Mobile Dev',sp:2,priority:'Critical',ac:'Company name, email, phone, business type. Confirmation screen. Welcome email triggered.'},
+    {id:'W7-007',task:'Password reset screen',role:'Mobile Dev',sp:1,priority:'High',ac:'Deep link from email opens app at reset screen. Token validation and expiry handled.'},
+    {id:'W7-008',task:'Home / Dashboard screen',role:'Mobile Dev',sp:3,priority:'High',ac:'Promo banner carousel, featured products, recent order summary, quick order CTA.'},
+    {id:'W7-009',task:'Product catalogue screen — browse by category',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Category grid, infinite scroll, skeleton loading, CDN images.'},
+    {id:'W7-010',task:'Product search screen — Meilisearch',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Instant results under 200ms. Typo-tolerant. Filter chips. Recent searches stored locally.'},
+    {id:'W7-011',task:'Product detail screen',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Swipeable images, specs, allergens, customer-specific price, add to basket.'},
+    {id:'W7-012',task:'Customer-specific pricing sync on mobile',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Authenticated users see only their contracted prices. Identical logic to web portal.'},
+    {id:'W7-013',task:'Cash & Carry screen',role:'Mobile Dev',sp:2,priority:'Medium',ac:'Map pin, opening hours, directions button, promotions, click-and-collect info.'},
+    {id:'W7-014',task:'Push notification setup — Firebase Cloud Messaging',role:'Mobile Dev + Backend Dev',sp:3,priority:'High',ac:'FCM for iOS and Android. Device token registered on login. Test notification received.'},
+  ]},
+  {week:'Week 8',goal:'Mobile App — Ordering, account management, notifications',sp:47,tickets:[
+    {id:'W8-001',task:'Basket screen',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Add/remove/update. Swipe to remove. Running total. Minimum order notice. Empty state.'},
+    {id:'W8-002',task:'Checkout flow — multi-step',role:'Mobile Dev',sp:5,priority:'Critical',ac:'Basket > Address > Date > Notes > Payment > Confirmation. Back preserves state.'},
+    {id:'W8-003',task:'Payment screen — Stripe Payment Sheet',role:'Mobile Dev',sp:3,priority:'Critical',ac:'Stripe Payment Sheet. Apple Pay / Google Pay where available. Test payment processed.'},
+    {id:'W8-004',task:'Order confirmation screen',role:'Mobile Dev',sp:1,priority:'Critical',ac:'Order number, summary, delivery shown. Push notification triggered.'},
+    {id:'W8-005',task:'Order history screen',role:'Mobile Dev',sp:2,priority:'High',ac:'Orders with date, total, status. Infinite scroll. Filter by status.'},
+    {id:'W8-006',task:'Order detail screen',role:'Mobile Dev',sp:2,priority:'High',ac:'Items, quantities, prices, status timeline. Reorder button. Invoice download.'},
+    {id:'W8-007',task:'Repeat order functionality',role:'Mobile Dev',sp:2,priority:'High',ac:'Reorder from history populates basket. Unavailable products flagged.'},
+    {id:'W8-008',task:'Saved favourites screen',role:'Mobile Dev',sp:2,priority:'High',ac:'Heart icon toggles. Add all to basket. Empty state with browse CTA.'},
+    {id:'W8-009',task:'Quick order lists — create and manage',role:'Mobile Dev',sp:3,priority:'High',ac:'Named lists. One-tap to add list to basket. Lists synced to backend.'},
+    {id:'W8-010',task:'Account management screen',role:'Mobile Dev',sp:2,priority:'High',ac:'Edit name, email, company details. Multiple delivery addresses. Change password.'},
+    {id:'W8-011',task:'Invoice download on mobile',role:'Mobile Dev',sp:2,priority:'High',ac:'Invoice list. Tap opens PDF. Share button. Works offline if previously cached.'},
+    {id:'W8-012',task:'Push notification types — all categories',role:'Backend Dev',sp:3,priority:'High',ac:'Types: order_confirmed, dispatched, new_promotion, new_product, cash_carry_event.'},
+    {id:'W8-013',task:'Notifications screen — in-app centre',role:'Mobile Dev',sp:2,priority:'Medium',ac:'Read/unread state. Tap navigates to relevant screen. Mark all read.'},
+    {id:'W8-014',task:'Promotions screen',role:'Mobile Dev',sp:2,priority:'Medium',ac:'Active promotions with discount badges. Filter by category. Tap to product detail.'},
+    {id:'W8-015',task:'Offline mode — cache product data',role:'Mobile Dev',sp:3,priority:'Medium',ac:'React Query caches listings. Cart persists via AsyncStorage. Offline banner shown.'},
+    {id:'W8-016',task:'App icon, splash screen, and onboarding',role:'Mobile Dev + Designer',sp:2,priority:'High',ac:'Icons at all required sizes. Splash screen. 3-screen onboarding with skip option.'},
+  ]},
+  {week:'Week 9',goal:'App QA + Store Submission + ERP Integration',sp:44,tickets:[
+    {id:'W9-001',task:'Full QA — iOS physical device testing',role:'QA + Mobile Dev',sp:5,priority:'Critical',ac:'All screens on 2+ physical iOS devices. All user flows completed. Zero critical bugs.'},
+    {id:'W9-002',task:'Full QA — Android physical device testing',role:'QA + Mobile Dev',sp:5,priority:'Critical',ac:'All screens on 2+ Android devices. Back button behaviour correct. Zero critical bugs.'},
+    {id:'W9-003',task:'App performance — load time and memory usage',role:'Mobile Dev',sp:2,priority:'High',ac:'Cold start under 3 seconds. Product list under 1 second. No memory leaks detected.'},
+    {id:'W9-004',task:'App bug fixes from QA',role:'Mobile Dev',sp:5,priority:'Critical',ac:'All Critical and High bugs resolved. Re-tested on same devices. QA sign-off obtained.'},
+    {id:'W9-005',task:'Apple App Store assets',role:'Designer',sp:2,priority:'High',ac:'6 iPhone screenshots, 1 iPad screenshot. Icon 1024x1024. Descriptions and keywords.'},
+    {id:'W9-006',task:'Google Play Store assets',role:'Designer',sp:2,priority:'High',ac:'8 phone screenshots, feature graphic, 512px icon. Full description. Content rating done.'},
+    {id:'W9-007',task:'Apple App Store submission',role:'Mobile Dev',sp:2,priority:'Critical',ac:'Binary submitted via App Store Connect. Privacy policy URL included.'},
+    {id:'W9-008',task:'Google Play Store submission',role:'Mobile Dev',sp:2,priority:'Critical',ac:'Submitted to Play Console. Data safety form completed. Review submitted.'},
+    {id:'W9-009',task:'ERP integration — authenticate and connect',role:'Backend Dev',sp:3,priority:'Critical',ac:'Secure connection established. Credentials in env vars. Health check endpoint live.'},
+    {id:'W9-010',task:'ERP — product stock sync',role:'Backend Dev',sp:5,priority:'Critical',ac:'Stock synced every 15 minutes. Out-of-stock flagged in portal and app. Sync log recorded.'},
+    {id:'W9-011',task:'ERP — customer contract pricing sync',role:'Backend Dev',sp:5,priority:'Critical',ac:'Contract prices cached in Redis on login. ERP price overrides manual. Tested with 5 accounts.'},
+    {id:'W9-012',task:'Accounting software — invoice sync',role:'Backend Dev',sp:3,priority:'High',ac:'Orders trigger invoice in accounting system. Invoice number synced back to portal.'},
+    {id:'W9-013',task:'Payment gateway — ERP reconciliation',role:'Backend Dev',sp:2,priority:'High',ac:'Stripe payments update ERP status. Failed payment alert to admin.'},
+  ]},
+  {week:'Week 10',goal:'🚀 Full Project Go-Live — All platforms live',sp:35,tickets:[
+    {id:'W10-001',task:'Monitor Apple App Store review (1–7 days)',role:'PM + Mobile Dev',sp:1,priority:'Critical',ac:'Status checked daily. Rejection resolved within 24hrs. App live on App Store.'},
+    {id:'W10-002',task:'Monitor Google Play Store review (1–3 days)',role:'PM + Mobile Dev',sp:1,priority:'Critical',ac:'Any issue resolved and resubmitted. App live on Play Store.'},
+    {id:'W10-003',task:'End-to-end test — full order flow through ERP',role:'Backend Dev + PM',sp:5,priority:'Critical',ac:'Browse > basket > checkout > payment > ERP stock deducted > invoice created. All verified.'},
+    {id:'W10-004',task:'End-to-end test — mobile app to ERP',role:'Mobile Dev + Backend Dev',sp:3,priority:'Critical',ac:'Full mobile order flows to ERP. Push notification received. Invoice downloadable.'},
+    {id:'W10-005',task:'Pricing sync validation — web vs app vs ERP',role:'Backend Dev + Mobile Dev',sp:3,priority:'Critical',ac:'Same account shows identical prices on web, mobile, and ERP. No discrepancies.'},
+    {id:'W10-006',task:'ERP integration bug fixes',role:'Backend Dev',sp:3,priority:'Critical',ac:'All critical bugs resolved. ERP sync stable for 24-hour monitoring period.'},
+    {id:'W10-007',task:'Final security check — all platforms',role:'Lead Dev',sp:2,priority:'High',ac:'HTTPS everywhere. No keys in client code. All admin routes guarded. GDPR endpoints working.'},
+    {id:'W10-008',task:'Final performance check — 200 concurrent users',role:'Lead Dev',sp:2,priority:'High',ac:'All responses under 1 second. No crashes. Redis cache hit rate above 75%.'},
+    {id:'W10-009',task:'Client handover documentation — admin user guide',role:'PM',sp:3,priority:'High',ac:'Written guide: products, customers, pricing, promotions, push notifications, reports, orders.'},
+    {id:'W10-010',task:'Final staff training — all platforms',role:'PM',sp:1,priority:'Critical',ac:'Training covers admin, portal, mobile, ERP sync, customer account management.'},
+    {id:'W10-011',task:'Client final sign-off — all platforms',role:'PM + Client',sp:1,priority:'Critical',ac:'Written sign-off from Ahmed Foods on all platforms.'},
+    {id:'W10-012',task:'Final invoice — 10% remaining balance (£12,550)',role:'PM',sp:1,priority:'Critical',ac:'Final invoice sent. Retainer agreement signed. First month (£1,250) invoiced.'},
+    {id:'W10-013',task:'72-hour full platform monitoring',role:'Full Team',sp:3,priority:'Critical',ac:'All platforms monitored. P1 issues within 2 hours. Daily report for 3 days.'},
+    {id:'W10-014',task:'Handover to monthly retainer',role:'PM',sp:1,priority:'High',ac:'Retainer signed. SLA communicated. Monthly reporting schedule agreed.'},
+    {id:'W10-015',task:'Post-project retrospective — internal team review',role:'Full Team',sp:1,priority:'Medium',ac:'Retrospective held. Lessons learned saved to agency knowledge base.'},
+  ]},
+];
+
+// ── Storage ───────────────────────────────────────────────────────────────────
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+  catch(e) { return {}; }
+}
+function saveState(state) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+function getTicketStatus(id) {
+  return loadState()[id] || { status:'todo', updatedAt: null };
+}
+function setTicketStatus(id, status) {
+  const state = loadState();
+  state[id] = { status, updatedAt: new Date().toISOString() };
+  saveState(state);
+}
+
+// ── Counts ────────────────────────────────────────────────────────────────────
+const totalSP = sprints.reduce((a,s)=>a+s.sp,0);
+const totalTickets = sprints.reduce((a,s)=>a+s.tickets.length,0);
+const criticalCount = sprints.reduce((a,s)=>a+s.tickets.filter(t=>t.priority==='Critical').length,0);
+const highCount = sprints.reduce((a,s)=>a+s.tickets.filter(t=>t.priority==='High').length,0);
+
+// ── Init week filter ──────────────────────────────────────────────────────────
+const weekSelect = document.getElementById('filterWeek');
+weekSelect.innerHTML = '<option value="">All weeks</option>';
+sprints.forEach(s => {
+  const o = document.createElement('option');
+  o.value = s.week; o.textContent = s.week;
+  weekSelect.appendChild(o);
+});
+
+// ── Update global progress display ───────────────────────────────────────────
+function updateGlobalProgress() {
+  const state = loadState();
+  const counts = {todo:0,inprogress:0,inreview:0,done:0};
+  let doneSP = 0;
+  sprints.forEach(s => s.tickets.forEach(t => {
+    const st = (state[t.id]||{}).status || 'todo';
+    counts[st]++;
+    if(st==='done') doneSP += t.sp;
+  }));
+  const donePct = Math.round((counts.done / totalTickets) * 100);
+
+  document.getElementById('topProgressFill').style.width = donePct + '%';
+  document.getElementById('topProgressLabel').textContent = donePct + '% done';
+
+  document.getElementById('statsGrid').innerHTML = [
+    {label:'Story points',value:totalSP,sub:'Total project',icon:'ti-chart-bar'},
+    {label:'Total tickets',value:totalTickets,sub:'Across 10 sprints',icon:'ti-list-check'},
+    {label:'Done',value:counts.done,sub:`${doneSP} SP completed`,icon:'ti-circle-check',color:'var(--done-c)'},
+    {label:'In Progress',value:counts.inprogress + counts.inreview,sub:'Active tickets',icon:'ti-player-play',color:'var(--inprog-c)'},
+  ].map(s=>`
+    <div class="stat-card">
+      <div class="stat-label" style="${s.color?'color:'+s.color:''}"><i class="ti ${s.icon}"></i>${s.label}</div>
+      <div class="stat-value" style="${s.color?'color:'+s.color:''}">${s.value}</div>
+      <div class="stat-sub">${s.sub}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('progressSummaryText').textContent =
+    `${counts.done} done · ${counts.inreview} in review · ${counts.inprogress} in progress · ${counts.todo} to do`;
+
+  const barDefs = [
+    {key:'todo',    label:'To Do',       color:'var(--todo-c)'},
+    {key:'inprogress',label:'In Progress',color:'var(--inprog-c)'},
+    {key:'inreview',label:'In Review',   color:'var(--review-c)'},
+    {key:'done',    label:'Done',        color:'var(--done-c)'},
+  ];
+  document.getElementById('statusBars').innerHTML = barDefs.map(b => {
+    const pct = Math.round((counts[b.key]/totalTickets)*100);
+    return `<div class="status-bar-item">
+      <div class="status-bar-label" style="color:${b.color}">
+        <span>${b.label}</span><span style="font-family:'JetBrains Mono',monospace">${counts[b.key]}</span>
+      </div>
+      <div class="status-bar-track"><div class="status-bar-fill" style="width:${pct}%;background:${b.color}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ── Cycle status ──────────────────────────────────────────────────────────────
+function cycleStatus(ticketId, newStatus) {
+  setTicketStatus(ticketId, newStatus);
+  updateGlobalProgress();
+  const ticketEl = document.querySelector(`[data-ticket-id="${ticketId}"]`);
+  if (!ticketEl) return;
+  updateTicketUI(ticketEl, ticketId, newStatus);
+  const sprintBlock = ticketEl.closest('.sprint-block');
+  if (sprintBlock) updateSprintBar(sprintBlock);
+}
+
+function updateTicketUI(ticketEl, ticketId, status) {
+  ticketEl.className = 'ticket' + (status==='done' ? ' status-done' : '');
+  const footer = ticketEl.querySelector('.ticket-footer');
+  const updatedDiv = footer.querySelector('.ticket-updated');
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' ' + now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  footer.querySelector('.status-btn-group').innerHTML = STATUSES.map(s => `
+    <button class="status-btn${status===s.key?' '+s.cls:''}"
+      onclick="cycleStatus('${ticketId}','${s.key}')"
+      aria-label="Set status to ${s.label}"
+      aria-pressed="${status===s.key}">
+      <i class="ti ${s.icon}" aria-hidden="true"></i>
+      <span>${s.label}</span>
+    </button>
+  `).join('');
+
+  if(updatedDiv) updatedDiv.textContent = status!=='todo' ? `Updated ${timeStr}` : '';
+}
+
+function updateSprintBar(sprintBlock) {
+  const tickets = sprintBlock.querySelectorAll('[data-ticket-id]');
+  const state = loadState();
+  let done = 0;
+  tickets.forEach(t => { if((state[t.dataset.ticketId]||{}).status==='done') done++; });
+  const pct = tickets.length ? Math.round((done/tickets.length)*100) : 0;
+  const fill = sprintBlock.querySelector('.sprint-mini-fill');
+  const meta = sprintBlock.querySelector('.sprint-meta');
+  if(fill) fill.style.width = pct+'%';
+  const spTotal = Array.from(tickets).reduce((a,t)=>{
+    const sp = parseInt(t.querySelector('.badge-sp')?.textContent)||0;
+    return a+sp;
+  },0);
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+  const search = document.getElementById('search').value.toLowerCase().trim();
+  const pFilter = document.getElementById('filterPriority').value;
+  const rFilter = document.getElementById('filterRole').value;
+  const wFilter = document.getElementById('filterWeek').value;
+  const sFilter = document.getElementById('filterStatus').value;
+  const state = loadState();
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  let totalVisible = 0;
+  let spVisible = 0;
+
+  sprints.forEach((sprint, si) => {
+    if(wFilter && sprint.week !== wFilter) return;
+    const filtered = sprint.tickets.filter(t => {
+      const ticketStatus = (state[t.id]||{}).status || 'todo';
+      const matchSearch = !search || t.id.toLowerCase().includes(search) || t.task.toLowerCase().includes(search) || t.ac.toLowerCase().includes(search) || t.role.toLowerCase().includes(search);
+      const matchP = !pFilter || t.priority === pFilter;
+      const matchR = !rFilter || t.role.includes(rFilter);
+      const matchS = !sFilter || ticketStatus === sFilter;
+      return matchSearch && matchP && matchR && matchS;
+    });
+    if(!filtered.length) return;
+    totalVisible += filtered.length;
+    spVisible += filtered.reduce((a,t)=>a+t.sp,0);
+
+    const donePct = sprint.tickets.length
+      ? Math.round((sprint.tickets.filter(t=>(state[t.id]||{}).status==='done').length/sprint.tickets.length)*100)
+      : 0;
+    const isGoLive = sprint.goal.includes('🚀');
+
+    const sprintEl = document.createElement('div');
+    sprintEl.className = 'sprint-block';
+    sprintEl.setAttribute('role','listitem');
+
+    sprintEl.innerHTML = `
+      <div class="sprint-header" onclick="toggleSprint(this,${si})" aria-expanded="false" aria-controls="tickets-${si}">
+        <span class="sprint-week-badge${isGoLive?' golive':''}">${sprint.week}</span>
+        <span class="sprint-title">${sprint.goal}</span>
+        <div class="sprint-right">
+          <div class="sprint-mini-bar" title="${donePct}% done" aria-hidden="true">
+            <div class="sprint-mini-fill" style="width:${donePct}%"></div>
+          </div>
+          <span class="sprint-meta">${filtered.length} tickets · ${filtered.reduce((a,t)=>a+t.sp,0)} SP · ${donePct}% done</span>
+          <i class="ti ti-chevron-down sprint-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="tickets-list" id="tickets-${si}" role="list">
+        ${filtered.map(t => {
+          const ts = (state[t.id]||{}).status || 'todo';
+          const updatedAt = (state[t.id]||{}).updatedAt;
+          const timeStr = updatedAt
+            ? new Date(updatedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short'}) + ' ' + new Date(updatedAt).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})
+            : '';
+          return `
+          <div class="ticket${ts==='done'?' status-done':''}" role="listitem" data-ticket-id="${t.id}">
+            <div class="ticket-top">
+              <span class="ticket-id">${t.id}</span>
+              <span class="ticket-title">${t.task}</span>
+            </div>
+            <div class="ticket-badges">
+              <span class="badge badge-role"><i class="ti ti-user" aria-hidden="true"></i>${t.role}</span>
+              <span class="badge badge-sp"><i class="ti ti-diamonds" aria-hidden="true"></i>${t.sp} SP</span>
+              <span class="badge badge-${t.priority.toLowerCase()}">● ${t.priority}</span>
+            </div>
+            <div class="ticket-ac">
+              <div class="ac-label">Acceptance criteria</div>
+              <div class="ac-text">${t.ac}</div>
+            </div>
+            <div class="ticket-footer">
+              <div class="status-btn-group">
+                ${STATUSES.map(s=>`
+                  <button class="status-btn${ts===s.key?' '+s.cls:''}"
+                    onclick="cycleStatus('${t.id}','${s.key}')"
+                    aria-label="Set ${t.id} to ${s.label}"
+                    aria-pressed="${ts===s.key}">
+                    <i class="ti ${s.icon}" aria-hidden="true"></i>
+                    <span>${s.label}</span>
+                  </button>
+                `).join('')}
+              </div>
+              <span class="ticket-updated">${ts!=='todo'&&timeStr?'Updated '+timeStr:''}</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    `;
+    board.appendChild(sprintEl);
+  });
+
+  document.getElementById('resultMeta').textContent = (search||pFilter||rFilter||wFilter||sFilter)
+    ? `Showing ${totalVisible} ticket${totalVisible!==1?'s':''} · ${spVisible} SP`
+    : `${totalTickets} tickets · ${totalSP} story points across 10 sprints`;
+
+  if(!totalVisible) {
+    board.innerHTML = `<div class="empty"><i class="ti ti-search" aria-hidden="true"></i><p>No tickets match your filters.</p></div>`;
+  }
+}
+
+function toggleSprint(header, idx) {
+  const tickets = document.getElementById(`tickets-${idx}`);
+  const chevron = header.querySelector('.sprint-chevron');
+  const isOpen = tickets.classList.contains('open');
+  tickets.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+  header.setAttribute('aria-expanded', String(!isOpen));
+}
+function expandAll() {
+  document.querySelectorAll('.tickets-list').forEach(t=>t.classList.add('open'));
+  document.querySelectorAll('.sprint-chevron').forEach(c=>c.classList.add('open'));
+  document.querySelectorAll('.sprint-header').forEach(h=>{h.classList.add('open');h.setAttribute('aria-expanded','true');});
+}
+function collapseAll() {
+  document.querySelectorAll('.tickets-list').forEach(t=>t.classList.remove('open'));
+  document.querySelectorAll('.sprint-chevron').forEach(c=>c.classList.remove('open'));
+  document.querySelectorAll('.sprint-header').forEach(h=>{h.classList.remove('open');h.setAttribute('aria-expanded','false');});
+}
+function resetFilters() {
+  document.getElementById('search').value='';
+  document.getElementById('filterPriority').value='';
+  document.getElementById('filterRole').value='';
+  document.getElementById('filterWeek').value='';
+  document.getElementById('filterStatus').value='';
+  render();
+}
+function confirmClearAll() {
+  if(confirm('Clear all saved ticket progress? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    updateGlobalProgress();
+    render();
+  }
+}
+
+['search','filterPriority','filterRole','filterWeek','filterStatus'].forEach(id=>{
+  document.getElementById(id).addEventListener(id==='search'?'input':'change', render);
+});
+
+updateGlobalProgress();
+render();
+</script>
+</body>
+</html>
